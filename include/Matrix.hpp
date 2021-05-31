@@ -1,5 +1,5 @@
-#ifndef CONTROL_MATRIX_H
-#define CONTROL_MATRIX_H
+#ifndef CONTROLBOX_MATRIX_H
+#define CONTROLBOX_MATRIX_H
 
 #include <vector>
 #include <numeric>
@@ -55,6 +55,62 @@ namespace ControlBox
 	auto inline constexpr next_d(Size at, Stride stride)noexcept->Size { return at + stride.c_ld + stride.r_ld; }
 	auto inline constexpr last_d(Size at, Stride stride)noexcept->Size { return at - stride.c_ld - stride.r_ld; }
 
-
+	template <typename AType>
+	auto inline eye(Size m, double *A, AType a_t) noexcept->void
+	{
+		for (Size i(-1), ai0{ 0 }, aii{ 0 }; ++i < m; ai0 = next_r(ai0, a_t), aii = next_d(aii, a_t))
+		{
+			for (Size j(-1), aij{ ai0 }; ++j < m; aij = next_c(aij, a_t))
+				A[aij] = 0.0;
+			A[aii] = 1.0;
+		}
+	}
+	auto inline eye(Size m, double *A) noexcept->void { return eye(m, A, m); }
     
+    template <typename AddType, typename Btype, typename Ctype>
+    auto inline add(Size m, Size n, const double *A,AddType a_t, const double* B, Btype b_t, double* c, Ctype c_t)->void
+    {
+        for(Size i(-1), ai0{0}, bi0{0}, ci0{0}; ++i; ai0 = next_r(ai0,a_t), bi0 = next_r(bi0,b_t), ci0 = next_r(ci0,c_t))
+        {
+            for(Size j(-1), aij{ai0}, bij{bi0}, cij{ci0}; ++j <n; aij = next_c(aij, a_t), bij = next_c(bij, b_t), cij = next_c(cij, c_t))
+            {
+                c[cij] = A[aij] + B[bij];
+            }
+        }
+    }
+    auto inline add(Size m, Size n, const double* A, const double* B, double* c)->void{add(m,n,A,m,B,m,c,m);}
+
+    template<typename Atype, typename Btype, typename Ctype>
+    auto inline sub(Size m, Size n, const double* A, Atype a_t, const double* B, Btype b_t, double* c, Ctype c_t)->void
+    {
+        for(Size i(-1), ai0{0}, bi0{0}, ci0{0}; ++i; ai0 = next_r(ai0,a_t), bi0 = next_r(bi0,b_t), ci0 = next_r(ci0,c_t))
+        {
+            for(Size j(-1), aij{ai0}, bij{bi0}, cij{ci0}; ++j <n; aij = next_c(aij, a_t), bij = next_c(bij, b_t), cij = next_c(cij, c_t))
+            {
+                c[cij] = A[aij] + B[bij];
+            }
+        }
+    }
+    auto inline sub(Size m, Size n, const double* A, const double* B, double* c)->void{ sub(m,n,A,m,B,m,c,m);}
+
+    template<typename Atype, typename Btype, typename Ctype>
+    auto inline mult(Size m, Size n, Size o, const double* A, Atype a_t, const double* B, Btype b_t, double* c, Ctype c_t)
+    {
+        for(Size i(-1), ai0{0}; ++i < m; ai0 = next_r(ai0, a_t) )
+        {
+            for(Size j(-1), b0j{0}; ++j< o; b0j = next_c(b0j, b_t))
+            {   
+                Size cij{at(i,j,c_t)};
+                for(Size k(-1), aik{ai0}, bkj{b0j}; ++k < n; aik = next_c(aik, a_t), bkj = next_r(bkj, b_t) )
+                {
+                    c[cij] += (A[aik] * B[bkj]);
+                }
+            }
+        }
+    }
+    auto inline mult(Size m, Size n, Size o, const double* A, const double* B, double* c)->void{mult(m,n,o,A,m,B,n,c,m);}
+    
+
 }
+
+#endif

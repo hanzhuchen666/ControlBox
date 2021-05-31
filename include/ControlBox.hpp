@@ -1,4 +1,5 @@
-
+#ifndef CONTROLBOX
+#define CONTROLBOX
 namespace ControlBox{
     class Pid{
         public:
@@ -25,4 +26,28 @@ namespace ControlBox{
             double integral_;
             double result_;        
     };
+
+    class Kalman{
+        public:
+            auto init()->void;
+            auto setParams()->void;
+            auto setQ(double Q)->void;
+            auto setP(double P)->void;
+            auto solve()->void;
+            auto getResult()->auto;
+            
+
+        private:
+            double* A_;
+            double* B_;
+            double* Q_;
+            double* Pk_;
+            double* R_;
+            double* K_;
+            double* H_;
+
+    };
 }
+
+
+#endif

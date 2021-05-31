@@ -11,8 +11,11 @@ namespace ControlBox{
         Pid::pre_trueVal_ = 0;
         
     }
-    auto Pid::solve(double trueVal,double dtrueVal)->auto{
-
+    auto Pid::solve(double trueVal,double dtrueVal)->void{
+        Pid::error_ - Pid::target_ - trueVal;
+        Pid::integral_ += Pid::error_;
+        Pid::result_ = Pid::error_ * Pid::P_ - (dtrueVal) * Pid::D_ +  Pid::integral_ * Pid::I_;
+        Pid::pre_trueVal_ = trueVal;
     }
     auto Pid::setP(double P)->void{Pid::P_ = P;}
     auto Pid::setI(double I)->void{Pid::I_ = I;}
