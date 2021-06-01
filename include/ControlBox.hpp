@@ -1,5 +1,7 @@
 #ifndef CONTROLBOX
 #define CONTROLBOX
+#include "Matrix.hpp"
+
 namespace ControlBox{
     class Pid{
         public:
@@ -45,6 +47,8 @@ namespace ControlBox{
             double* R_;
             double* K_;
             double* H_;
+            Size s_status;
+            
 
     };
 }

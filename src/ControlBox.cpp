@@ -30,4 +30,13 @@ namespace ControlBox{
     }
     auto Pid::getResult()->auto{return Pid::result_;}
 
+
+
+    auto Kalman::solve()->void
+    {
+        //下一步的预测值
+        double xk_ = mult()
+
+    }
+
 }
