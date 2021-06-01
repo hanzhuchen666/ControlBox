@@ -35,7 +35,27 @@ namespace ControlBox{
     auto Kalman::solve()->void
     {
         //下一步的预测值
-        double xk_ = mult()
+        double Axk_1 [s_status_];
+        Size one(1);
+        mult(s_status_,s_status_,1,A_,xk_1_,Axk_1);
+        double Buk_1 [s_status_];
+        mult(s_status_,s_control_,1,B_,uk_1_,Buk_1);
+        double xk_[s_status_];
+        add(s_status_,1,Axk_1,Buk_1,xk_);
+
+        //预测值和真实值之间的协方差矩阵
+        double APAT [s_status_*s_status_];
+        amat(s_status_,s_status_,A_,Pk_1_,APAT);
+        double Pk__ [s_status_*s_status_];
+        add(s_status_,s_status_,APAT,Q_,Pk__);
+
+        //卡尔曼增益
+        double Kk;
+        
+
+
+
+
 
     }
 

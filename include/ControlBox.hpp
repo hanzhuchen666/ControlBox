@@ -47,7 +47,7 @@ namespace ControlBox{
             double* R_;
             double* K_;
             double* H_;
-            Size s_status;
+            Size s_status_;
             
 
     };

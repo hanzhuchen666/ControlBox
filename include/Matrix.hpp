@@ -108,7 +108,7 @@ namespace ControlBox
             }
         }
     }
-    auto inline mult(Size m, Size n, Size o, const double* A, const double* B, double* c)->void{mult(m,n,o,A,m,B,n,c,m);}
+    auto inline mult(Size m, Size n, Size o, const double* A, const double* B, double* c)->void{ return mult(m,n,o,A,m,B,n,c,m);}
     
 
 }
